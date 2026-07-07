@@ -24,7 +24,7 @@ final class PMSetProtection: ProtectionLayer {
 
         if result {
             isActive = true
-            LidFlowLogger.protection.warning("L5 pmset disablesleep activated (REQUIRES MANUAL RESTORE)")
+            NoSleepLogger.protection.warning("L5 pmset disablesleep activated (REQUIRES MANUAL RESTORE)")
         } else {
             throw ProtectionError.sudoRequired(level: level)
         }
@@ -40,9 +40,9 @@ final class PMSetProtection: ProtectionLayer {
 
         if result {
             isActive = false
-            LidFlowLogger.protection.info("L5 pmset disablesleep deactivated (sleep restored)")
+            NoSleepLogger.protection.info("L5 pmset disablesleep deactivated (sleep restored)")
         } else {
-            LidFlowLogger.protection.error("L5 FAILED to restore pmset disablesleep! Manual intervention needed.")
+            NoSleepLogger.protection.error("L5 FAILED to restore pmset disablesleep! Manual intervention needed.")
         }
     }
 
@@ -62,7 +62,7 @@ final class PMSetProtection: ProtectionLayer {
             process.waitUntilExit()
             return process.terminationStatus == 0
         } catch {
-            LidFlowLogger.protection.error("L5 Failed to execute privileged command: \(error.localizedDescription)")
+            NoSleepLogger.protection.error("L5 Failed to execute privileged command: \(error.localizedDescription)")
             return false
         }
     }

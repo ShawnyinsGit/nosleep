@@ -164,7 +164,7 @@ struct MenuPopover: View {
             } label: {
                 HStack {
                     Image(systemName: "power")
-                    Text("退出 LidFlow")
+                    Text("退出 NoSleep")
                     Spacer()
                 }
             }
@@ -193,7 +193,7 @@ struct MenuPopover: View {
 
     private var footerSection: some View {
         HStack {
-            Text("LidFlow — 让合盖不再焦虑")
+            Text("NoSleep — 让合盖不再焦虑")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
         }

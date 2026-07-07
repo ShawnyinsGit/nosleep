@@ -25,13 +25,13 @@ final class AssertionProtection: ProtectionLayer {
         let status = IOPMAssertionCreateWithName(
             kIOPMAssertPreventUserIdleSystemSleep as CFString,
             0, // kIOPMAssertionTimeoutInfinite
-            "LidFlow: Preventing idle sleep for development tasks" as CFString,
+            "NoSleep: Preventing idle sleep for development tasks" as CFString,
             &assertionID
         )
 
         if status == kIOReturnSuccess {
             isActive = true
-            LidFlowLogger.protection.info("L1 Assertion activated (id: \(self.assertionID))")
+            NoSleepLogger.protection.info("L1 Assertion activated (id: \(self.assertionID))")
         } else {
             throw ProtectionError.activationFailed(level: level, reason: "IOPMAssertionCreate failed with status \(status)")
         }
@@ -42,7 +42,7 @@ final class AssertionProtection: ProtectionLayer {
         IOPMAssertionRelease(assertionID)
         assertionID = 0
         isActive = false
-        LidFlowLogger.protection.info("L1 Assertion deactivated")
+        NoSleepLogger.protection.info("L1 Assertion deactivated")
     }
 }
 
@@ -59,7 +59,7 @@ final class WakeTimerProtection: ProtectionLayer {
         scheduleNextWake()
         startTimer()
         isActive = true
-        LidFlowLogger.protection.info("L4 WakeTimer activated")
+        NoSleepLogger.protection.info("L4 WakeTimer activated")
     }
 
     func deactivate() {
@@ -67,7 +67,7 @@ final class WakeTimerProtection: ProtectionLayer {
         timer?.invalidate()
         timer = nil
         isActive = false
-        LidFlowLogger.protection.info("L4 WakeTimer deactivated")
+        NoSleepLogger.protection.info("L4 WakeTimer deactivated")
     }
 
     private func scheduleNextWake() {
@@ -81,7 +81,7 @@ final class WakeTimerProtection: ProtectionLayer {
         )
 
         if result != kIOReturnSuccess {
-            LidFlowLogger.protection.warning("L4 Failed to schedule wake event: \(result)")
+            NoSleepLogger.protection.warning("L4 Failed to schedule wake event: \(result)")
         }
     }
 

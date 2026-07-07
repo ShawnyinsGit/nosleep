@@ -1,9 +1,9 @@
 import Foundation
 
 enum Constants {
-    static let appName = "LidFlow"
+    static let appName = "NoSleep"
     static let appVersion = "0.2.3"
-    static let appBundleId = "com.lidflow.app"
+    static let appBundleId = "com.nosleep.app"
 
     // Detection polling interval in seconds
     static let detectionPollInterval: TimeInterval = 5.0

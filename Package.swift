@@ -2,14 +2,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "LidFlow",
+    name: "NoSleep",
     platforms: [
         .macOS(.v14)
     ],
     targets: [
         .executableTarget(
-            name: "LidFlow",
-            path: "Sources/LidFlow",
+            name: "NoSleep",
+            path: "Sources/NoSleep",
             linkerSettings: [
                 .linkedFramework("IOKit"),
                 .linkedFramework("CoreGraphics"),

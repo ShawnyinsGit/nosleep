@@ -2,7 +2,7 @@ import SwiftUI
 import AppKit
 
 @main
-struct LidFlowApp: App {
+struct NoSleepApp: App {
     @StateObject private var appState = AppStateManager()
 
     var body: some Scene {
@@ -15,7 +15,7 @@ struct LidFlowApp: App {
                 .environmentObject(appState)
         } label: {
             Label {
-                Text("LidFlow")
+                Text("NoSleep")
             } icon: {
                 Image(systemName: appState.currentState.menuBarIconName)
                     .symbolRenderingMode(.palette)

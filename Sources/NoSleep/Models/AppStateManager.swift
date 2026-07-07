@@ -4,10 +4,10 @@ import AppKit
 import Combine
 
 /// Central state manager that coordinates between AppDetector, IdleDetector,
-/// and ProtectionManager. This is the "brain" of LidFlow.
+/// and ProtectionManager. This is the "brain" of NoSleep.
 @MainActor
 final class AppStateManager: ObservableObject {
-    @Published var currentState: LidFlowState = .idle
+    @Published var currentState: NoSleepState = .idle
     @Published var isManualMode: Bool = false
 
     let protectionManager = ProtectionManager()
@@ -72,13 +72,13 @@ final class AppStateManager: ObservableObject {
             idleDetector.cancelCountdown()
             if !protectionManager.isProtectionActive {
                 protectionManager.activateProtection()
-                LidFlowLogger.general.info("Protection activated — target apps: \(names.joined(separator: ", "))")
+                NoSleepLogger.general.info("Protection activated — target apps: \(names.joined(separator: ", "))")
             }
         } else {
             // All target apps exited → start countdown (if protection is active)
             if protectionManager.isProtectionActive {
                 idleDetector.startCountdown()
-                LidFlowLogger.general.info("All target apps exited — starting idle countdown")
+                NoSleepLogger.general.info("All target apps exited — starting idle countdown")
             }
         }
         updateState()
@@ -86,7 +86,7 @@ final class AppStateManager: ObservableObject {
 
     private func handleIdleTimeout() {
         protectionManager.deactivateProtection()
-        LidFlowLogger.general.info("Idle timeout reached — protection deactivated, normal sleep restored")
+        NoSleepLogger.general.info("Idle timeout reached — protection deactivated, normal sleep restored")
         updateState()
     }
 
@@ -138,7 +138,7 @@ final class AppStateManager: ObservableObject {
         )
         window.title = Constants.appName
         window.center()
-        window.setFrameAutosaveName("LidFlowMainWindow")
+        window.setFrameAutosaveName("NoSleepMainWindow")
 
         let settingsView = MainWindow()
             .environmentObject(protectionManager)

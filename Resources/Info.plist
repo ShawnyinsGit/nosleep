@@ -5,13 +5,13 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>zh_CN</string>
     <key>CFBundleExecutable</key>
-    <string>LidFlow</string>
+    <string>NoSleep</string>
     <key>CFBundleIdentifier</key>
-    <string>com.lidflow.app</string>
+    <string>com.nosleep.app</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>LidFlow</string>
+    <string>NoSleep</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -23,6 +23,6 @@
     <key>LSUIElement</key>
     <true/>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2026 LidFlow. All rights reserved.</string>
+    <string>Copyright © 2026 NoSleep. All rights reserved.</string>
 </dict>
 </plist>

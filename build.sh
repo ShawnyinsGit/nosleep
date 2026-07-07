@@ -4,13 +4,13 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
 BUILD_DIR="$PROJECT_DIR/build"
-APP_NAME="LidFlow"
+APP_NAME="NoSleep"
 APP_BUNDLE="$BUILD_DIR/$APP_NAME.app"
 BUNDLE_CONTENTS="$APP_BUNDLE/Contents"
 MACOS_DIR="$BUNDLE_CONTENTS/MacOS"
 RESOURCES_DIR="$BUNDLE_CONTENTS/Resources"
 
-echo "🔨 Building LidFlow..."
+echo "🔨 Building NoSleep..."
 
 # Step 1: Swift build
 cd "$PROJECT_DIR"
@@ -18,7 +18,7 @@ swift build -c release 2>&1
 echo "✅ Swift build complete"
 
 # Step 2: Find the built binary
-BINARY=$(swift build -c release --show-bin-path)/LidFlow
+BINARY=$(swift build -c release --show-bin-path)/NoSleep
 if [ ! -f "$BINARY" ]; then
     echo "❌ Binary not found at: $BINARY"
     exit 1

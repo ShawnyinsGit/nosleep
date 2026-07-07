@@ -3,9 +3,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 BUILD_DIR="$SCRIPT_DIR/build"
-APP_BUNDLE="$BUILD_DIR/LidFlow.app"
-DMG_PATH="$BUILD_DIR/LidFlow.dmg"
-APP_NAME="LidFlow"
+APP_BUNDLE="$BUILD_DIR/NoSleep.app"
+DMG_PATH="$BUILD_DIR/NoSleep.dmg"
+APP_NAME="NoSleep"
 
 # Verify app bundle exists
 if [ ! -d "$APP_BUNDLE" ]; then

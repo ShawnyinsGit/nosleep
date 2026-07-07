@@ -1,7 +1,7 @@
 import Foundation
 
-/// Represents the current operational state of LidFlow
-enum LidFlowState: Equatable {
+/// Represents the current operational state of NoSleep
+enum NoSleepState: Equatable {
     /// No target apps running, protection inactive
     case idle
 

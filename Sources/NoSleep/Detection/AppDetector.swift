@@ -108,9 +108,9 @@ final class AppDetector: ObservableObject {
 
         if isAnyTargetAppRunning != wasRunning {
             if isAnyTargetAppRunning {
-                LidFlowLogger.detection.info("Target apps detected: \(activeNames.joined(separator: ", "))")
+                NoSleepLogger.detection.info("Target apps detected: \(activeNames.joined(separator: ", "))")
             } else {
-                LidFlowLogger.detection.info("No target apps running")
+                NoSleepLogger.detection.info("No target apps running")
             }
         }
     }

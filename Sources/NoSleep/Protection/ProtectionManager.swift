@@ -32,7 +32,7 @@ final class ProtectionManager: ObservableObject {
 
     /// Activate all layers up to maxLevel
     func activateProtection() {
-        LidFlowLogger.protection.info("Activating protection up to L\(self.maxLevel.rawValue)")
+        NoSleepLogger.protection.info("Activating protection up to L\(self.maxLevel.rawValue)")
 
         for level in ProtectionLevel.allCases where level <= maxLevel {
             guard let layer = layers[level] else { continue }
@@ -50,14 +50,14 @@ final class ProtectionManager: ObservableObject {
             } catch {
                 let errorMsg = error.localizedDescription
                 failedLayers[level] = errorMsg
-                LidFlowLogger.protection.error("Failed to activate L\(level.rawValue): \(errorMsg)")
+                NoSleepLogger.protection.error("Failed to activate L\(level.rawValue): \(errorMsg)")
             }
         }
     }
 
     /// Deactivate all active layers in reverse order
     func deactivateProtection() {
-        LidFlowLogger.protection.info("Deactivating all protection layers")
+        NoSleepLogger.protection.info("Deactivating all protection layers")
 
         // Deactivate in reverse order (highest level first)
         for level in ProtectionLevel.allCases.reversed() {

@@ -26,7 +26,7 @@ final class IdleDetector: ObservableObject {
         isCountdownActive = true
         shouldDeactivateProtection = false
 
-        LidFlowLogger.detection.info("Idle countdown started: \(self.remainingSeconds)s")
+        NoSleepLogger.detection.info("Idle countdown started: \(self.remainingSeconds)s")
 
         countdownTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
@@ -43,7 +43,7 @@ final class IdleDetector: ObservableObject {
         remainingSeconds = Int(idleTimeout)
         shouldDeactivateProtection = false
 
-        LidFlowLogger.detection.info("Idle countdown cancelled")
+        NoSleepLogger.detection.info("Idle countdown cancelled")
     }
 
     /// Update idle timeout setting
@@ -67,7 +67,7 @@ final class IdleDetector: ObservableObject {
             isCountdownActive = false
             shouldDeactivateProtection = true
             remainingSeconds = Int(idleTimeout)
-            LidFlowLogger.detection.info("Idle countdown finished — protection should deactivate")
+            NoSleepLogger.detection.info("Idle countdown finished — protection should deactivate")
         }
     }
 }

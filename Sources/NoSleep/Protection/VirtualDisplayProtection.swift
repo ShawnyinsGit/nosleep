@@ -25,7 +25,7 @@ final class VirtualDisplayProtection: ProtectionLayer {
         // Attempt to create a virtual display using IOKit
         try activateViaIOKit()
         isActive = true
-        LidFlowLogger.protection.info("L3 Virtual display activated (displayID: \(self.displayID))")
+        NoSleepLogger.protection.info("L3 Virtual display activated (displayID: \(self.displayID))")
     }
 
     func deactivate() {
@@ -33,7 +33,7 @@ final class VirtualDisplayProtection: ProtectionLayer {
 
         removeVirtualDisplay()
         isActive = false
-        LidFlowLogger.protection.info("L3 Virtual display deactivated")
+        NoSleepLogger.protection.info("L3 Virtual display deactivated")
     }
 
     // MARK: - IOKit Virtual Display
@@ -86,7 +86,7 @@ final class VirtualDisplayProtection: ProtectionLayer {
         let status = IOPMAssertionCreateWithName(
             "PreventSystemSleep" as CFString,
             0, // kIOPMAssertionTimeoutInfinite
-            "LidFlow VirtualDisplay: Clamshell Prevention" as CFString,
+            "NoSleep VirtualDisplay: Clamshell Prevention" as CFString,
             &assertionID
         )
 
@@ -107,7 +107,7 @@ final class VirtualDisplayProtection: ProtectionLayer {
             let expert = IOIteratorNext(expertIterator)
             if expert != 0 {
                 // Set the "external-display" property hint
-                let key = "LidFlow-VirtualDisplay" as CFString
+                let key = "NoSleep-VirtualDisplay" as CFString
                 let value = true as CFBoolean
                 IORegistryEntrySetCFProperty(expert, key, value)
                 IOObjectRelease(expert)
@@ -130,7 +130,7 @@ final class VirtualDisplayProtection: ProtectionLayer {
         if kr == KERN_SUCCESS {
             let expert = IOIteratorNext(expertIterator)
             if expert != 0 {
-                let key = "LidFlow-VirtualDisplay" as CFString
+                let key = "NoSleep-VirtualDisplay" as CFString
                 let value = false as CFBoolean
                 IORegistryEntrySetCFProperty(expert, key, value)
                 IOObjectRelease(expert)

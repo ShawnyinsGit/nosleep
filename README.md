@@ -1,12 +1,12 @@
-# LidFlow
+# NoSleep
 
 **让合盖重新变成一个不需要思考的动作。**
 
-LidFlow 是一款 macOS 菜单栏工具，当你的开发工具（VS Code、Cursor、Windsurf、QoderWork）在跑任务时，合盖后任务继续运行；任务结束后，自动恢复正常休眠。
+NoSleep 是一款 macOS 菜单栏工具，当你的开发工具（VS Code、Cursor、Windsurf、QoderWork）在跑任务时，合盖后任务继续运行；任务结束后，自动恢复正常休眠。
 
 ## 核心原理
 
-macOS 把"合盖"和"空闲"当成两件不同的事。`caffeinate -i` 只能防止空闲休眠，合盖场景下无效。LidFlow 通过**五层冗余防护**解决这个问题：
+macOS 把"合盖"和"空闲"当成两件不同的事。`caffeinate -i` 只能防止空闲休眠，合盖场景下无效。NoSleep 通过**五层冗余防护**解决这个问题：
 
 | 层级 | 机制 | 需要 sudo |
 |------|------|-----------|
@@ -30,21 +30,21 @@ macOS 把"合盖"和"空闲"当成两件不同的事。`caffeinate -i` 只能防
 ### 安装
 
 ```bash
-# 打开 DMG，拖拽 LidFlow.app 到 Applications
-open build/LidFlow.dmg
+# 打开 DMG，拖拽 NoSleep.app 到 Applications
+open build/NoSleep.dmg
 ```
 
 ### 从源码构建
 
 ```bash
-git clone https://github.com/ShawnyinsGit/LidFlow.git
-cd LidFlow
+git clone https://github.com/ShawnyinsGit/nosleep.git
+cd nosleep
 
 # 构建 .app
 ./build.sh
 
 # 运行
-open build/LidFlow.app
+open build/NoSleep.app
 
 # 打包 DMG
 ./package-dmg.sh
@@ -76,7 +76,7 @@ open build/LidFlow.app
 # 查看当前系统断言
 pmset -g assertions
 
-# 启动 LidFlow 后打开 VS Code，再查看
+# 启动 NoSleep 后打开 VS Code，再查看
 # 应出现 "PreventUserIdleSystemSleep" 相关断言
 ```
 

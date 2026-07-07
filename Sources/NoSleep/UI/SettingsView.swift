@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Settings view for LidFlow preferences
+/// Settings view for NoSleep preferences
 struct SettingsView: View {
     @EnvironmentObject var appDetector: AppDetector
     @EnvironmentObject var protectionManager: ProtectionManager
@@ -46,7 +46,7 @@ struct SettingsView: View {
             Label("监控应用", systemImage: "app.badge.checkmark")
                 .font(.headline)
 
-            Text("当以下应用运行时，LidFlow 将自动开启防护")
+            Text("当以下应用运行时，NoSleep 将自动开启防护")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -169,7 +169,7 @@ struct SettingsView: View {
                     idleDetector.updateTimeout(newValue * 60)
                 }
 
-            Text("空闲超过设定时间后，LidFlow 将自动关闭防护并恢复正常休眠")
+            Text("空闲超过设定时间后，NoSleep 将自动关闭防护并恢复正常休眠")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

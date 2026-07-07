@@ -1,8 +1,8 @@
 import Foundation
 import os.log
 
-enum LidFlowLogger {
-    static let subsystem = "com.lidflow.app"
+enum NoSleepLogger {
+    static let subsystem = "com.nosleep.app"
 
     static let protection = Logger(subsystem: subsystem, category: "Protection")
     static let detection = Logger(subsystem: subsystem, category: "Detection")

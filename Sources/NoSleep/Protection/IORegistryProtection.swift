@@ -35,7 +35,7 @@ final class IORegistryProtection: ProtectionLayer {
 
         if result == kIOReturnSuccess {
             isActive = true
-            LidFlowLogger.protection.info("L2 IORegistry protection activated")
+            NoSleepLogger.protection.info("L2 IORegistry protection activated")
         } else {
             IOObjectRelease(service)
             service = 0
@@ -57,6 +57,6 @@ final class IORegistryProtection: ProtectionLayer {
         IOObjectRelease(service)
         service = 0
         isActive = false
-        LidFlowLogger.protection.info("L2 IORegistry protection deactivated")
+        NoSleepLogger.protection.info("L2 IORegistry protection deactivated")
     }
 }
