@@ -2,7 +2,24 @@
 
 **让合盖重新变成一个不需要思考的动作。**
 
-NoSleep 是一款 macOS 菜单栏工具，当你的开发工具（VS Code、Cursor、Windsurf、QoderWork）在跑任务时，合盖后任务继续运行；任务结束后，自动恢复正常休眠。
+NoSleep 是一款 macOS 菜单栏工具，支持 GUI 应用（VS Code、Cursor、Windsurf、QoderWork、Codex）和 CLI 工具（Claude Code、Kimi Code、Codex CLI、QoderWork CLI）。当这些工具在跑任务时，合盖后任务继续运行；任务结束后，自动恢复正常休眠。
+
+## 支持的开发工具
+
+### GUI 应用
+- Visual Studio Code
+- Cursor
+- Windsurf
+- QoderWork
+- Codex
+
+### CLI 工具
+- Claude Code (`claude`)
+- Kimi Code (`kimi`)
+- Codex CLI (`codex`)
+- QoderWork CLI (`qoder`)
+
+CLI 工具通过进程检测（`pgrep`）自动识别，在终端运行时 NoSleep 会自动开启防护。
 
 ## 核心原理
 

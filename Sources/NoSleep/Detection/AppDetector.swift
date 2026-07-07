@@ -2,8 +2,8 @@ import Foundation
 import AppKit
 import Combine
 
-/// Monitors running applications and detects when target apps are active.
-/// Uses NSWorkspace notifications for real-time detection plus polling as backup.
+/// Monitors running applications (GUI) and processes (CLI) to detect
+/// when target tools are active.
 @MainActor
 final class AppDetector: ObservableObject {
     @Published var targetApps: [TargetApp] = TargetApp.defaultApps()
@@ -12,12 +12,10 @@ final class AppDetector: ObservableObject {
 
     private var pollingTimer: Timer?
     private var workspaceObservers: [NSObjectProtocol] = []
-    private var cancellables = Set<AnyCancellable>()
 
     init() {
         setupWorkspaceObservers()
         startPolling()
-        // Initial check
         checkRunningApps()
     }
 
@@ -28,43 +26,39 @@ final class AppDetector: ObservableObject {
         }
     }
 
-    // MARK: - Workspace Observers (real-time)
+    // MARK: - Workspace Observers (real-time, GUI only)
 
     private func setupWorkspaceObservers() {
         let nc = NSWorkspace.shared.notificationCenter
 
-        // App launched
         let launchObserver = nc.addObserver(
             forName: NSWorkspace.didLaunchApplicationNotification,
             object: nil,
             queue: .main
-        ) { [weak self] notification in
+        ) { [weak self] _ in
             Task { @MainActor in self?.checkRunningApps() }
         }
 
-        // App terminated
         let terminateObserver = nc.addObserver(
             forName: NSWorkspace.didTerminateApplicationNotification,
             object: nil,
             queue: .main
-        ) { [weak self] notification in
+        ) { [weak self] _ in
             Task { @MainActor in self?.checkRunningApps() }
         }
 
-        // App activated (brought to foreground)
         let activateObserver = nc.addObserver(
             forName: NSWorkspace.didActivateApplicationNotification,
             object: nil,
             queue: .main
-        ) { [weak self] notification in
+        ) { [weak self] _ in
             Task { @MainActor in self?.checkRunningApps() }
         }
 
-        // Store all observers for cleanup
         workspaceObservers = [launchObserver, terminateObserver, activateObserver]
     }
 
-    // MARK: - Polling (backup)
+    // MARK: - Polling (GUI + CLI)
 
     private func startPolling() {
         pollingTimer = Timer.scheduledTimer(
@@ -91,10 +85,15 @@ final class AppDetector: ObservableObject {
             guard app.isEnabled && app.isInstalled else { continue }
 
             let isRunning: Bool
-            if let bundleId = app.bundleIdentifier {
-                isRunning = runningBundleIds.contains(bundleId) || runningNames.contains(app.name)
-            } else {
-                isRunning = runningNames.contains(app.name)
+            switch app.kind {
+            case .gui:
+                if let bundleId = app.bundleIdentifier {
+                    isRunning = runningBundleIds.contains(bundleId) || runningNames.contains(app.name)
+                } else {
+                    isRunning = runningNames.contains(app.name)
+                }
+            case .cli:
+                isRunning = TargetApp.isCLIProcessRunning(processNames: app.processNames)
             }
 
             if isRunning {
@@ -108,9 +107,9 @@ final class AppDetector: ObservableObject {
 
         if isAnyTargetAppRunning != wasRunning {
             if isAnyTargetAppRunning {
-                NoSleepLogger.detection.info("Target apps detected: \(activeNames.joined(separator: ", "))")
+                NoSleepLogger.detection.info("Targets active: \(activeNames.joined(separator: ", "))")
             } else {
-                NoSleepLogger.detection.info("No target apps running")
+                NoSleepLogger.detection.info("No targets running")
             }
         }
     }
@@ -122,12 +121,21 @@ final class AppDetector: ObservableObject {
         targetApps[index].isEnabled.toggle()
     }
 
-    func addApp(name: String, bundleIdentifier: String? = nil) {
+    func addApp(name: String, bundleIdentifier: String? = nil, kind: TargetKind = .gui, processNames: [String] = []) {
+        let installed: Bool
+        switch kind {
+        case .gui:
+            installed = TargetApp.isAppInstalled(name: name, kind: .gui)
+        case .cli:
+            installed = TargetApp.isCLIInstalled(processNames: processNames)
+        }
         let newApp = TargetApp(
             name: name,
             bundleIdentifier: bundleIdentifier,
+            kind: kind,
+            processNames: processNames,
             isEnabled: true,
-            isInstalled: TargetApp.isAppInstalled(name: name)
+            isInstalled: installed
         )
         targetApps.append(newApp)
     }
@@ -136,10 +144,18 @@ final class AppDetector: ObservableObject {
         targetApps.removeAll { $0.id == app.id }
     }
 
-    /// Refresh installation status of all target apps
     func refreshInstallationStatus() {
         for index in targetApps.indices {
-            targetApps[index].isInstalled = TargetApp.isAppInstalled(name: targetApps[index].name)
+            switch targetApps[index].kind {
+            case .gui:
+                targetApps[index].isInstalled = TargetApp.isAppInstalled(
+                    name: targetApps[index].name, kind: .gui
+                )
+            case .cli:
+                targetApps[index].isInstalled = TargetApp.isCLIInstalled(
+                    processNames: targetApps[index].processNames
+                )
+            }
         }
     }
 }

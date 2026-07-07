@@ -14,13 +14,8 @@ enum Constants {
     // Battery protection defaults
     static let defaultLowBatteryThreshold: Int = 15
 
-    // Default target applications
-    static let defaultTargetApps: [String] = [
-        "Visual Studio Code",
-        "Cursor",
-        "Windsurf",
-        "QoderWork"
-    ]
+    // CLI polling interval — CLI process checks are slightly more expensive
+    static let cliPollInterval: TimeInterval = 8.0
 
     // Wake timer interval for L4 (seconds)
     static let wakeTimerInterval: TimeInterval = 25.0

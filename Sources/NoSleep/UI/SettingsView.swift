@@ -9,6 +9,8 @@ struct SettingsView: View {
     @State private var showAddAppSheet = false
     @State private var newAppName = ""
     @State private var newAppBundleId = ""
+    @State private var newAppKind: TargetKind = .gui
+    @State private var newAppProcessNames = ""
     @State private var idleTimeoutMinutes: Double = Constants.defaultIdleTimeout / 60.0
     @State private var lowBatteryEnabled = true
     @State private var lowBatteryThreshold: Double = Double(Constants.defaultLowBatteryThreshold)
@@ -57,6 +59,12 @@ struct SettingsView: View {
                         Circle()
                             .fill(app.isInstalled ? Color.green : Color.gray)
                             .frame(width: 8, height: 8)
+
+                        // Kind badge
+                        Image(systemName: app.kind.iconName)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 16)
 
                         Text(app.name)
                             .font(.body)
@@ -238,34 +246,62 @@ struct SettingsView: View {
                 .font(.headline)
 
             VStack(alignment: .leading, spacing: 8) {
+                Text("类型")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Picker("类型", selection: $newAppKind) {
+                    ForEach(TargetKind.allCases, id: \.self) { kind in
+                        Text(kind.displayName).tag(kind)
+                    }
+                }
+                .pickerStyle(.segmented)
+
                 Text("应用名称")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                TextField("例如：IntelliJ IDEA", text: $newAppName)
-                    .textFieldStyle(.roundedBorder)
+                TextField(
+                    newAppKind == .cli ? "例如：Claude Code" : "例如：IntelliJ IDEA",
+                    text: $newAppName
+                )
+                .textFieldStyle(.roundedBorder)
 
-                Text("Bundle ID（可选）")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                TextField("例如：com.jetbrains.intellij", text: $newAppBundleId)
-                    .textFieldStyle(.roundedBorder)
+                if newAppKind == .gui {
+                    Text("Bundle ID（可选）")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    TextField("例如：com.jetbrains.intellij", text: $newAppBundleId)
+                        .textFieldStyle(.roundedBorder)
+                } else {
+                    Text("进程名称（逗号分隔）")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    TextField("例如：claude, claude-code", text: $newAppProcessNames)
+                        .textFieldStyle(.roundedBorder)
+                    Text("NoSleep 会通过 pgrep 检测这些进程是否在运行")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
             }
 
             HStack {
                 Button("取消") {
-                    newAppName = ""
-                    newAppBundleId = ""
+                    resetAddSheet()
                     showAddAppSheet = false
                 }
 
                 Button("添加") {
                     if !newAppName.isEmpty {
+                        let names = newAppProcessNames
+                            .split(separator: ",")
+                            .map { $0.trimmingCharacters(in: .whitespaces) }
+                            .filter { !$0.isEmpty }
                         appDetector.addApp(
                             name: newAppName,
-                            bundleIdentifier: newAppBundleId.isEmpty ? nil : newAppBundleId
+                            bundleIdentifier: newAppKind == .gui ? (newAppBundleId.isEmpty ? nil : newAppBundleId) : nil,
+                            kind: newAppKind,
+                            processNames: names
                         )
-                        newAppName = ""
-                        newAppBundleId = ""
+                        resetAddSheet()
                         showAddAppSheet = false
                     }
                 }
@@ -274,6 +310,13 @@ struct SettingsView: View {
             }
         }
         .padding(24)
-        .frame(width: 360)
+        .frame(width: 380)
+    }
+
+    private func resetAddSheet() {
+        newAppName = ""
+        newAppBundleId = ""
+        newAppProcessNames = ""
+        newAppKind = .gui
     }
 }
